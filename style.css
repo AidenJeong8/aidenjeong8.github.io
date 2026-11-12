@@ -4,18 +4,30 @@
   box-sizing: border-box;
 }
 
+html {
+  background: #fff;
+  color-scheme: light;
+}
+
 body {
   font-family: "Times New Roman", Times, serif;
   font-size: 12pt;
   line-height: 1.15;
   color: #000;
-  background: #fff;
+  background: transparent;
 }
 
 .container {
   max-width: 540px;
   margin: 0 auto;
   padding: 72px 24px;
+}
+
+.container.home {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 h1 {
@@ -34,13 +46,9 @@ p {
   margin-bottom: 12px;
 }
 
-a {
-  color: #1155cc;
+a, a:hover, .sky-toggle {
+  color: #0000ee;
   text-decoration: underline;
-}
-
-a:hover {
-  color: #1155cc;
 }
 
 nav {
@@ -59,23 +67,13 @@ nav.social {
   gap: 14px;
 }
 
-nav.social a {
-  text-decoration: none;
-  color: #000;
-  display: flex;
-}
-
 .back {
   display: inline-flex;
   align-items: center;
   gap: 4px;
   margin-bottom: 24px;
   text-decoration: none;
-  color: #000;
-}
-
-.back:hover {
-  color: #000;
+  color: inherit;
 }
 
 /* Bookshelf */
@@ -95,7 +93,6 @@ nav.social a {
 
 .book-list .thoughts {
   font-size: 12pt;
-  color: #000;
   line-height: 1.15;
 }
 
@@ -110,7 +107,6 @@ nav.social a {
 
 /* Reading */
 .reading-intro {
-  color: #000;
   font-size: 12pt;
   margin-bottom: 12px;
 }
@@ -120,9 +116,9 @@ nav.social a {
   padding: 6px 0;
   font-size: 12pt;
   font-family: inherit;
-  color: #000;
+  color: inherit;
   border: none;
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid #888;
   border-radius: 0;
   margin-bottom: 16px;
   outline: none;
@@ -130,7 +126,7 @@ nav.social a {
 }
 
 .reading-search:focus {
-  border-bottom-color: #000;
+  border-bottom-color: currentColor;
 }
 
 .reading-list li.hidden {
@@ -196,4 +192,120 @@ summary .count {
 
 .reading-list a {
   font-size: 12pt;
+}
+
+/* "stars" / "sunsets" toggles: words in the home page bio (wired up by sky.js) */
+.sky-toggle {
+  display: inline;
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+/* Backdrop modes: html.night (+ .stars or .sunset), set by sky.js */
+html.night {
+  background: #03050a;
+  color-scheme: dark;
+}
+
+html.night body {
+  color: #e6e9f0;
+  text-shadow: 0 0 6px #03050a;
+}
+
+html.sunset {
+  background: #090b22;
+}
+
+html.sunset body {
+  text-shadow: 0 0 4px #000, 0 0 10px rgba(0, 0, 0, .7);
+}
+
+html.night a, html.night a:hover, html.night .sky-toggle {
+  color: #fff;
+}
+
+html.night .back, html.night .back:hover {
+  color: #e6e9f0;
+}
+
+html.night .reading-search {
+  border-bottom-color: #9aa3b2;
+}
+
+html.night .reading-search:focus {
+  border-bottom-color: #e6e9f0;
+}
+
+html.night .reading-list .date {
+  color: #9aa3b2;
+}
+
+/* Night sky backdrop (sky.js) */
+.sky, .meteors, .water {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.sky svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.sky .tw {
+  animation: tw 4s ease-in-out infinite;
+}
+
+.sky .sp {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: spark 5s ease-in-out infinite;
+}
+
+@keyframes tw {
+  50% { opacity: .35; }
+}
+
+@keyframes spark {
+  0%, 100% { opacity: .9; transform: scale(1); }
+  50% { opacity: .2; transform: scale(.5); }
+}
+
+/* lake (sky.js, sunset mode): a webgl canvas placed over the water area of the scene */
+.water canvas {
+  position: absolute;
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sky .tw, .sky .sp { animation: none; }
+}
+
+.meteor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 1.5px;
+  border-radius: 1px;
+  transform-origin: 100% 50%;
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(220,230,255,.35) 60%, rgba(255,255,255,.95));
+}
+
+.meteor::after {
+  content: "";
+  position: absolute;
+  right: -1px;
+  top: 50%;
+  width: 3px;
+  height: 3px;
+  margin-top: -1.5px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 6px 2px rgba(200,215,255,.7);
 }
